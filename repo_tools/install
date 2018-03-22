@@ -1,0 +1,36 @@
+#!/bin/sh
+
+PRJECT_DIR=$1
+REPO_DIR=${HOME}/bin/
+REPO=myrepo
+REPO_TOOLS=.repo
+
+if [ -e $PRJECT_DIR ]
+then
+	echo "$PRJECT_DIR exist"
+else
+	echo "$PRJECT_DIR doesn't exist"
+	exit 1
+fi
+
+echo "install repo tools"
+if [ ! -e $PRJECT_DIR/$REPO_TOOLS ]
+then
+	echo "$PRJECT_DIR/.repo doesn't exist"
+	cp -R $REPO_TOOLS $PRJECT_DIR
+else
+	echo "$PRJECT_DIR/.repo exist"
+fi
+
+if [ ! -e $REPO_DIR/$REPO ]
+then
+	echo "repo doesn't exsit"
+	mkdir $REPO_DIR
+	cp $REPO $REPO_DIR
+	echo "PATH=$PATH:$REPO_DIR" >> $HOME/.bashrc
+	echo "PATH=$PATH:$REPO_DIR" >> $HOME/.zshrc
+else
+	echo "repo exist"
+fi
+
+echo "done"
