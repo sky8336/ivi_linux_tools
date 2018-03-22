@@ -1,36 +1,51 @@
 #!/bin/sh
 
+color_failed="\e[0;31m"
+color_success="\e[0;32m"
+color_reset="\e[00m"
+
 PRJECT_DIR=$1
-REPO_DIR=${HOME}/bin/
+REPO_DIR=${HOME}/bin
 REPO=myrepo
 REPO_TOOLS=.repo
 
+#
+# check if project root dir exist
+#
 if [ -e $PRJECT_DIR ]
 then
-	echo "$PRJECT_DIR exist"
+	echo "project root dir: $PRJECT_DIR"
 else
-	echo "$PRJECT_DIR doesn't exist"
-	exit 1
+	echo "the new created project root dir: $PRJECT_DIR"
 fi
 
-echo "install repo tools"
-if [ ! -e $PRJECT_DIR/$REPO_TOOLS ]
-then
-	echo "$PRJECT_DIR/.repo doesn't exist"
+#
+# copy .repo to the project root dir.
+#
+echo "### install repo tools ###"
+if [ ! -e $PRJECT_DIR/$REPO_TOOLS ]; then
+	echo "$PRJECT_DIR/.repo doesn't exist, copy .repo to the folder"
 	cp -R $REPO_TOOLS $PRJECT_DIR
 else
-	echo "$PRJECT_DIR/.repo exist"
+	echo "$PRJECT_DIR/.repo already exist"
 fi
 
-if [ ! -e $REPO_DIR/$REPO ]
-then
-	echo "repo doesn't exsit"
+#
+# display install result by checking if .repo exsit in the root dir.
+#
+if [ ! -e $REPO_DIR/$REPO ]; then
+	echo "repo doesn't exsit in the project root dir, copy failed."
+	echo -e "${color_failed}>### install failed! ###${color_reset}"
 	mkdir $REPO_DIR
 	cp $REPO $REPO_DIR
 	echo "PATH=$PATH:$REPO_DIR" >> $HOME/.bashrc
 	echo "PATH=$PATH:$REPO_DIR" >> $HOME/.zshrc
 else
-	echo "repo exist"
-fi
+	echo -e "${color_success}### install successfully! ###"
 
-echo "done"
+	# copy the script to the project root dir.
+	cp autoBuild_ivi_linux.sh $PRJECT_DIR/
+	echo "you need to enter $PRJECT_DIR/, and run ./autoBuild_ivi_linux.sh to" \
+		"build the project"
+	echo -e "== done ==${color_reset}"
+fi
