@@ -16,7 +16,8 @@ if [ -e $PRJECT_DIR ]
 then
 	echo "project root dir: $PRJECT_DIR"
 else
-	echo "the new created project root dir: $PRJECT_DIR"
+	echo "$PRJECT_DIR doesn't exist!"
+	exit 1
 fi
 
 #
